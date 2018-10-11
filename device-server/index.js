@@ -1,5 +1,4 @@
 const WebSocketClient = require('websocket').client;
-const SerialPort = require('serialport');
 const { execFile } = require('child_process');
 const request = require('request-promise-native');
 
@@ -8,7 +7,18 @@ const config = require('../config');
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
 const client = new WebSocketClient();
-const serialPort = new SerialPort(config.serialPort);
+
+let SerialPort;
+let serialPort;
+if (config.serialTest) {
+  console.log('Using mock serial port');
+  SerialPort = require('serialport/test');
+  SerialPort.Binding.createPort(config.serialPort, { echo: true, record: true });
+} else {
+  console.log('Using real serial port');
+  SerialPort = require('serialport');
+}
+serialPort = new SerialPort(config.serialPort);
 
 const CONNECT_RETRY_DELAY = 30 * 1000;
 const CMD_EYES = 0;
