@@ -23,6 +23,7 @@
     "websocket": "^1.0.28"
   },
   "devDependencies": {
+    "@types/serialport": "^6.0.4",
     "@types/websocket": "0.0.40"
   }
 }

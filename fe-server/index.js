@@ -15,6 +15,7 @@ let deviceConnection;
 
 function sendMessage(message) {
   if (deviceConnection) {
+    console.log('Sending message to device', message);
     deviceConnection.sendUTF(JSON.stringify(message));
   }
 }
