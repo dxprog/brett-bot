@@ -1,0 +1,28 @@
+{
+  "name": "brettbot",
+  "version": "1.0.0",
+  "description": "A Brett-like Robot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dxprog/brett-bot.git"
+  },
+  "author": "Matt Hackmann <matt@dxprog.com>",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/dxprog/brett-bot/issues"
+  },
+  "homepage": "https://github.com/dxprog/brett-bot#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "request": "^2.88.0",
+    "serialport": "^7.0.2",
+    "websocket": "^1.0.28"
+  },
+  "devDependencies": {
+    "@types/websocket": "0.0.40"
+  }
+}
