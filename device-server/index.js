@@ -8,8 +8,9 @@ const config = require('../config');
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
 const client = new WebSocketClient();
-const serialPort = new SerialPort(config.serialPort)
+const serialPort = new SerialPort(config.serialPort);
 
+const CONNECT_RETRY_DELAY = 30 * 1000;
 const CMD_EYES = 0;
 const CMD_HEAD = 1;
 const CMD_RIGHT_ARM = 2;
@@ -24,6 +25,14 @@ const COMMANDS = {
     execFile('espeak', [ '-ven+m2', '-k5', '-s120', data.phrase ]);
   }
 };
+
+function retryConnect() {
+  console.log(`Will retry connection in ${CONNECT_RETRY_DELAY / 1000} seconds...`);
+  setTimeout(() => {
+    console.log('Retrying connection...');
+    connect();
+  }, CONNECT_RETRY_DELAY);
+}
 
 function connect() {
   client.connect(SOCKET_URL, config.socketProtocol);
@@ -62,15 +71,21 @@ function sendCommand(command, data) {
 }
 
 client.on('connectFailed', err => {
-  console.log(err);
+  console.error('Connection failed: ', err);
+  retryConnect();
 });
 
 client.on('connect', conn => {
+  console.log('Connected to API server');
   conn.on('error', err => {
-    console.error(err);
+    console.error('An error occurred: ', err);
+    retryConnect();
   });
   conn.on('message', messageReceived);
-  conn.on('close', connect);
+  conn.on('close', () => {
+    console.log('Connection closed');
+    retryConnect();
+  });
 });
 
 connect();
