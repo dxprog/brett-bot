@@ -32,6 +32,15 @@ app.get('/red', (req, res) => {
   }
 });
 
+app.get('/talk', (req, res) => {
+  if (deviceConnection) {
+    sendMessage({
+      command: 'SPEAK',
+      phrase: 'Eric... eric, the stock price is going down'
+    });
+  }
+});
+
 httpServer.listen(config.port, () => {
   console.log(`Server listening on ${config.port}`);
 });

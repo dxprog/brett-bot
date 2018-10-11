@@ -1,5 +1,7 @@
 const WebSocketClient = require('websocket').client;
 const SerialPort = require('serialport/test');
+const { execFile } = require('child_process');
+const request = require('request-promise-native');
 
 const config = require('../config');
 
@@ -19,6 +21,9 @@ const COMMANDS = {
   EYES(data) {
     const rgbValue = (data.red ? 0x4 : 0) | (data.green ? 0x2 : 0) | (data.blue ? 0x1 : 0);
     sendCommand(CMD_EYES, rgbValue);
+  },
+  SPEAK(data) {
+    execFile('espeak', [ '-ven+m2', '-k5', '-s120', data.phrase ]);
   }
 };
 
