@@ -1,13 +1,11 @@
 const WebSocketClient = require('websocket').client;
-const SerialPort = require('serialport/test');
+const SerialPort = require('serialport');
 const { execFile } = require('child_process');
 const request = require('request-promise-native');
 
 const config = require('../config');
 
-const SOCKET_URL = `ws://localhost:${config.port}`;
-
-SerialPort.Binding.createPort(config.serialPort, { echo: true, record: true });
+const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
 const client = new WebSocketClient();
 const serialPort = new SerialPort(config.serialPort)
