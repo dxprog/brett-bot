@@ -8,17 +8,7 @@ const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
 const client = new WebSocketClient();
 
-let SerialPort;
 let serialPort;
-if (config.serialTest) {
-  console.log('Using mock serial port');
-  SerialPort = require('serialport/test');
-  SerialPort.Binding.createPort(config.serialPort, { echo: true, record: true });
-} else {
-  console.log('Using real serial port');
-  SerialPort = require('serialport');
-}
-serialPort = new SerialPort(config.serialPort);
 
 const CONNECT_RETRY_DELAY = 30 * 1000;
 const CMD_EYES = 0;
@@ -36,15 +26,47 @@ const COMMANDS = {
   }
 };
 
-function retryConnect() {
-  console.log(`Will retry connection in ${CONNECT_RETRY_DELAY / 1000} seconds...`);
+function retryApiConnect() {
+  console.log(`Lost API connection. Will retry connection in ${CONNECT_RETRY_DELAY / 1000} seconds...`);
   setTimeout(() => {
     console.log('Retrying connection...');
-    connect();
+    connectToApiServer();
   }, CONNECT_RETRY_DELAY);
 }
 
-function connect() {
+function retryArduinoConnect() {
+  console.log(`Lost Arduino connection. Will retry connection in ${CONNECT_RETRY_DELAY / 1000} seconds...`);
+  setTimeout(() => {
+    console.log('Retrying connection...');
+    connectToArduino();
+  }, CONNECT_RETRY_DELAY);
+}
+
+function connectToArduino() {
+  let SerialPort;
+  if (config.serialTest) {
+    console.log('Using mock serial port');
+    SerialPort = require('serialport/test');
+    SerialPort.Binding.createPort(config.serialPort, { echo: true, record: true });
+  } else {
+    console.log('Using real serial port');
+    SerialPort = require('serialport');
+  }
+  serialPort = new SerialPort(config.serialPort, {
+    baudRate: config.serialBaud
+  });
+  serialPort.on('data', data => {
+    console.log('From Arduino: ', data.toString());
+  });
+  serialPort.on('close', retryArduinoConnect);
+  serialPort.on('open', err => {
+    if (!err) {
+      console.log(`Listening to serial comms on port ${config.serialPort} @ ${config.serialBaud}`);
+    }
+  });
+}
+
+function connectToApiServer() {
   client.connect(SOCKET_URL, config.socketProtocol);
 }
 
@@ -66,18 +88,11 @@ function messageReceived(message) {
   }
 }
 
-function sendByteToDevice(value) {
-  const byte = String.fromCharCode(value);
-  serialPort.write(byte);
-}
-
 function sendCommand(command, data) {
-  sendByteToDevice(command);
   const dataToSend = Array.isArray(data) ? data : [ data ];
   console.log(`Sending command: ${command}`, dataToSend);
-  dataToSend.forEach(value => {
-    sendByteToDevice(value);
-  });
+  dataToSend.unshift(command);
+  serialPort.write(Buffer.from(dataToSend));
 }
 
 client.on('connectFailed', err => {
@@ -98,4 +113,5 @@ client.on('connect', conn => {
   });
 });
 
-connect();
+connectToArduino();
+connectToApiServer();
