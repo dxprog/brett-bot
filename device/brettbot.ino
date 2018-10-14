@@ -8,7 +8,7 @@
 #define CMD_LEFT_ARM   3
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   pinMode(RED_PIN, OUTPUT);
   pinMode(GREEN_PIN, OUTPUT);
@@ -18,9 +18,13 @@ void setup() {
 /**
  * Waits for a byte from serial communications and returns it
  */
-uint8_t readSerialByte() {
+byte readSerialByte() {
   while (Serial.available() == 0);
-  return Serial.read();
+  byte retVal;
+  while (Serial.available() > 0) {
+    retVal = Serial.read();
+  }
+  return retVal;
 }
 
 /**
@@ -29,15 +33,19 @@ uint8_t readSerialByte() {
  * (char) xxxxxRGB
  */
 void cmdEyes() {
-  uint8_t value = Serial.read();
+  long value = readSerialByte();
+  Serial.print("Color value: ");
+  Serial.println(value, HEX);
 
-  digitalWrite(RED_PIN, value & 0x4 > 1 ? HIGH : LOW);
-  digitalWrite(GREEN_PIN, value & 0x2 > 1 ? HIGH : LOW);
-  digitalWrite(BLUE_PIN, value & 0x1 > 1 ? HIGH : LOW);
+  digitalWrite(RED_PIN, value >> 2 & 0x1);
+  digitalWrite(GREEN_PIN, value >> 1 & 0x1);
+  digitalWrite(BLUE_PIN, value & 0x1);
 }
 
 void loop() {
-  uint8_t cmd = readSerialByte();
+  long cmd = readSerialByte();
+  Serial.print("Received command: ");
+  Serial.println(cmd, HEX);
 
   switch (cmd) {
     case CMD_EYES:
