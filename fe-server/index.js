@@ -5,6 +5,7 @@ const { server: WebSocketServer } = require('websocket');
 const config = require('../config');
 
 const app = express();
+app.use(express.urlencoded());
 const httpServer = http.createServer(app);
 const socketServer = new WebSocketServer({
   httpServer,
@@ -20,25 +21,26 @@ function sendMessage(message) {
   }
 }
 
-app.get('/red', (req, res) => {
+app.post('/eyes', (req, res) => {
   if (deviceConnection) {
     sendMessage({
       command: 'EYES',
-      red: true,
-      green: false,
-      blue: false
+      red: !!Number(req.body.red),
+      green: !!Number(req.body.green),
+      blue: !!Number(req.body.blue)
     });
-    res.send('OK');
   }
+  res.send('OK');
 });
 
-app.get('/talk', (req, res) => {
+app.post('/speak', (req, res) => {
   if (deviceConnection) {
     sendMessage({
       command: 'SPEAK',
-      phrase: 'Eric... eric, the stock price is going down'
+      phrase: req.body.text
     });
   }
+  res.send('OK');
 });
 
 httpServer.listen(config.port, () => {
