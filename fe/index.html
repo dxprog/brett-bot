@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BrettBot</title>
+  </head>
+  <body>
+    <form id="brett-bot" action="https://api.brettbot.com/speak" method="post">
+      <label for="text">Speak: </label>
+      <input type="text" name="text" id="text" />
+      <fieldset>
+        <summary>Eyes</summary>
+        <label for="red">
+          <input type="checkbox" name="red" id="red" value="1" />
+          Red
+        </label>
+        <label for="green">
+          <input type="checkbox" name="green" id="green" value="1" />
+          Green
+        </label>
+        <label for="blue">
+          <input type="checkbox" name="blue" id="blue" value="1" />
+          Blue
+        </label>
+      </fieldset>
+      <button>Submit</button>
+    </form>
+    <script>
+      const form = document.getElementById('brett-bot');
+
+      function xhr(endpoint, formData) {
+        const data = [];
+        Object.keys(formData).forEach(function(key) {
+          data.push(`${encodeURIComponent(key)}=${encodeURIComponent(formData[key])}`);
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.brettbot.app/${endpoint}`, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(data.join('&'));
+      }
+
+      form.addEventListener('submit', function(evt) {
+        evt.preventDefault();
+        const red = document.getElementById('red').checked ? '1' : '0';
+        const green = document.getElementById('green').checked ? '1' : '0';
+        const blue = document.getElementById('blue').checked ? '1' : '0';
+        xhr('eyes', { red, green, blue });
+
+        const text = document.getElementById('text');
+        if (text.value.length) {
+          xhr('speak', { text: text.value });
+          text.value = '';
+        }
+      });
+    </script>
+  </body>
+</html>
