@@ -1,0 +1,56 @@
+.eye-color {
+  padding: 10px;
+  background-color: rgb(50, 59, 64);
+  border: 0;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.eye-color:hover {
+  background-color: rgb(69, 82, 90);
+}
+
+.eye-color:active {
+  background-color: rgb(36, 44, 47);
+}
+
+.eye-color__swatch {
+  display: inline-block;
+  width: 80px;
+  height: 0;
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+.eye-color__swatch--off {
+  background-color: #000;
+}
+
+.eye-color__swatch--red {
+  background-color: #f00;
+}
+
+.eye-color__swatch--yellow {
+  background-color: #ff0;
+}
+
+.eye-color__swatch--magenta {
+  background-color: #f0f;
+}
+
+.eye-color__swatch--green {
+  background-color: #0f0;
+}
+
+.eye-color__swatch--cyan {
+  background-color: #0ff;
+}
+
+.eye-color__swatch--blue {
+  background-color: #00f;
+}
+
+.eye-color__swatch--white {
+  background-color: #fff;
+}
