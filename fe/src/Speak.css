@@ -1,5 +1,25 @@
-.speak-input {
+.speak__input {
   padding: 12px;
   font-size: 18px;
   width: 50%;
+  border-radius: 4px;
+  border: 1px solid rgb(69, 82, 90);;
+}
+
+.speak__button {
+  padding: 12px;
+  font-size: 18px;
+  margin-left: 12px;
+  background-color: rgb(50, 59, 64);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.speak__button:hover {
+  background-color: rgb(69, 82, 90);
+}
+
+.speak__button:active {
+  background-color: rgb(36, 44, 47);
 }
