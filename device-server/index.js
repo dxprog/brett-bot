@@ -3,6 +3,7 @@ const { execFile } = require('child_process');
 const request = require('request-promise-native');
 
 const config = require('../config');
+const Espeak = require('./espeak');
 
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
@@ -22,7 +23,9 @@ const COMMANDS = {
     sendCommand(CMD_EYES, rgbValue);
   },
   SPEAK(data) {
-    execFile('espeak', [ '-ven+m2', '-k5', '-s120', data.phrase ]);
+    // TODO - shouldn't have to instantiate this every time
+    const espeak = new Espeak(data);
+    espeak.speak(data.phrase);
   }
 };
 
