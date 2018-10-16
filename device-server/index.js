@@ -100,19 +100,19 @@ function sendCommand(command, data) {
 
 client.on('connectFailed', err => {
   console.error('Connection failed: ', err);
-  retryConnect();
+  retryApiConnect();
 });
 
 client.on('connect', conn => {
   console.log('Connected to API server');
   conn.on('error', err => {
     console.error('An error occurred: ', err);
-    retryConnect();
+    retryApiConnect();
   });
   conn.on('message', messageReceived);
   conn.on('close', () => {
     console.log('Connection closed');
-    retryConnect();
+    retryApiConnect();
   });
 });
 
