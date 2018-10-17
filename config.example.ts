@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   url: 'localhost',
   port: 4242,
   socketProtocol: 'brett-bot-protocol',

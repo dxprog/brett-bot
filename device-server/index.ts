@@ -2,9 +2,8 @@ import { client as WebSocketClient, connection, IMessage } from 'websocket';
 import * as SerialPort from 'serialport';
 const SerialPortTest = require('serialport/test');
 
+import config from '../config';
 import { Espeak, IEspeakOptions } from './espeak';
-
-const config = require('../config');
 
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 

@@ -7,8 +7,7 @@ import {
   connection
 } from 'websocket';
 
-// TODO: Old style import until the whole project is in TS
-const config = require('../config');
+import config from '../config';
 
 const app = express();
 app.use(express.json());
