@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "api-server/dist/",
+    "outDir": "api-server/build/",
     "noImplicitAny": true,
     "target": "es2017",
     "declaration": true,

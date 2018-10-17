@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "device-server/dist/",
+    "outDir": "device-server/build/",
     "noImplicitAny": true,
     "target": "es2017",
     "declaration": true,

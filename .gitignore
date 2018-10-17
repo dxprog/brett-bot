@@ -10,7 +10,7 @@ config.js
 /fe/coverage
 
 # production
-/fe/build
+build/
 
 # misc
 .DS_Store

@@ -7,6 +7,8 @@
     "start:fe": "node fe/scripts/start.js",
     "start:api": "ts-node --project tsconfig.api.json api-server/index.ts",
     "start:device": "ts-node --project tsconfig.device.json device-server/index.ts",
+    "build:api": "tsc --project tsconfig.api.json",
+    "build:device": "tsc --project tsconfig.device.json",
     "build:fe": "node fe/scripts/build.js",
     "test:fe": "node fe/scripts/test.js --env=jsdom"
   },
