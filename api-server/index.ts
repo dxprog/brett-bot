@@ -1,5 +1,6 @@
-import * as http from 'http';
+import * as cors from 'cors';
 import * as express from 'express';
+import * as http from 'http';
 import {
   server as WebSocketServer,
   request,
@@ -10,7 +11,8 @@ import {
 const config = require('../config');
 
 const app = express();
-app.use(express.urlencoded());
+app.use(express.json());
+app.use(cors());
 const httpServer = http.createServer(app);
 const socketServer = new WebSocketServer({
   httpServer,
@@ -26,25 +28,11 @@ function sendMessage(message: any) {
   }
 }
 
-app.post('/eyes', (req: express.Request, res: express.Response) => {
-  if (deviceConnection) {
-    sendMessage({
-      command: 'EYES',
-      red: !!Number(req.body.red),
-      green: !!Number(req.body.green),
-      blue: !!Number(req.body.blue)
-    });
-  }
-  res.send('OK');
-});
-
-app.post('/speak', (req: express.Request, res: express.Response) => {
-  if (deviceConnection) {
-    sendMessage({
-      command: 'SPEAK',
-      phrase: req.body.text
-    });
-  }
+app.post('/:command', (req: express.Request, res: express.Response) => {
+  sendMessage({
+    command: req.params.command,
+    ...req.body
+  });
   res.send('OK');
 });
 

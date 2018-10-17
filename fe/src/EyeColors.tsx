@@ -5,14 +5,14 @@ import { EyeColor } from './EyeColor';
 import { post } from './api';
 
 const colors = {
-  off: [ 0, 0, 0 ],
-  red: [ 1, 0, 0 ],
-  yellow: [ 1, 1, 0 ],
-  magenta: [ 1, 0, 1 ],
-  green: [ 0, 1, 0 ],
-  cyan: [ 0, 1, 1 ],
-  blue: [ 0, 0, 1 ],
-  white: [ 1, 1, 1 ]
+  off: [ false, false, false ],
+  red: [ true, false, false ],
+  yellow: [ true, true, false ],
+  magenta: [ true, false, true ],
+  green: [ false, true, false ],
+  cyan: [ false, true, true ],
+  blue: [ false, false, true ],
+  white: [ true, true, true ]
 }
 
 export class EyeColors extends React.Component {
