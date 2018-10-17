@@ -1,6 +1,31 @@
-const { execFile } = require('child_process');
+import { execFile } from 'child_process';
 
-const OPTIONS_CONSTRAINTS = {
+export interface IEspeakOptions {
+  [key: string]: any,
+  lang?: string;
+  gender?: string;
+  variant?: number;
+  speed?: number;
+  ssml?: boolean;
+  pitch?: number;
+  emphasis?: number;
+}
+
+const DEFAULT_OPTIONS: IEspeakOptions = {
+  lang: 'en',
+  gender: 'm',
+  variant: 3,
+  speed: 120,
+  ssml: false,
+  pitch: 50,
+  emphasis: 5
+};
+
+function isNumeric(val: any): boolean {
+  return val - 0 == val;
+}
+
+const OPTIONS_CONSTRAINTS: any = {
   lang: [
     // Fully supported
     'af', 'bs', 'ca', 'cs', 'de', 'en', 'en-us', 'en-sc', 'en-n', 'en-rp', 'en-wm',
@@ -19,30 +44,19 @@ const OPTIONS_CONSTRAINTS = {
   emphasis: 'number'
 }
 
-const DEFAULT_OPTIONS = {
-  lang: 'en',
-  gender: 'm',
-  variant: 3,
-  speed: 120,
-  ssml: false,
-  pitch: 50,
-  emphasis: 5
-};
 
-function isNumeric(val) {
-  return val - 0 == val;
-}
+export class Espeak {
+  private options: IEspeakOptions;
 
-module.exports = class Espeak {
-  constructor(options = DEFAULT_OPTIONS) {
+  constructor(options: IEspeakOptions = DEFAULT_OPTIONS) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
   }
 
-  speak(text) {
-    const optionsValid = this._verifyOptions();
+  public speak(text: string): void {
+    const optionsValid = this.verifyOptions();
     if (!optionsValid.length) {
       const { options } = this;
-      const args = [];
+      const args: Array<string> = [];
       const langModifiers = `${options.gender || ''}${options.variant || ''}`;
       args.push(`-v${options.lang}${langModifiers && '+'}${langModifiers}`);
       args.push(`-k${options.emphasis}`);
@@ -56,8 +70,8 @@ module.exports = class Espeak {
     }
   }
 
-  _verifyOptions() {
-    const errors = [];
+  private verifyOptions(): Array<string> {
+    const errors: Array<string> = [];
 
     Object.keys(OPTIONS_CONSTRAINTS).forEach(key => {
       if (this.options[key]) {

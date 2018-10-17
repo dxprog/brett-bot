@@ -1,28 +1,46 @@
-const WebSocketClient = require('websocket').client;
-const { execFile } = require('child_process');
-const request = require('request-promise-native');
+import { client as WebSocketClient, connection, IMessage } from 'websocket';
+import * as SerialPort from 'serialport';
+const SerialPortTest = require('serialport/test');
+
+import { Espeak, IEspeakOptions } from './espeak';
 
 const config = require('../config');
-const Espeak = require('./espeak');
 
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
 const client = new WebSocketClient();
 
-let serialPort;
+let serialPort: SerialPort;
 
 const CONNECT_RETRY_DELAY = 30 * 1000;
-const CMD_EYES = 0;
-const CMD_HEAD = 1;
-const CMD_RIGHT_ARM = 2;
-const CMD_LEFT_ARM = 3;
 
-const COMMANDS = {
-  EYES(data) {
+enum Command {
+  Eyes = 0,
+  Head = 1,
+  RightArm = 2,
+  LeftArm = 3
+}
+
+interface ICommand {
+  command: string;
+}
+
+interface IEyeColorCommand extends ICommand {
+  red?: boolean;
+  green?: boolean;
+  blue?: boolean;
+}
+
+interface ISpeechCommand extends ICommand, IEspeakOptions {
+  phrase: string;
+}
+
+const COMMANDS: any = {
+  EYES(data: IEyeColorCommand) {
     const rgbValue = (data.red ? 0x4 : 0) | (data.green ? 0x2 : 0) | (data.blue ? 0x1 : 0);
-    sendCommand(CMD_EYES, rgbValue);
+    sendCommand(Command.Eyes, rgbValue);
   },
-  SPEAK(data) {
+  SPEAK(data: ISpeechCommand) {
     // TODO - shouldn't have to instantiate this every time
     const espeak = new Espeak(data);
     espeak.speak(data.phrase);
@@ -46,23 +64,23 @@ function retryArduinoConnect() {
 }
 
 function connectToArduino() {
-  let SerialPort;
   if (config.serialTest) {
     console.log('Using mock serial port');
-    SerialPort = require('serialport/test');
-    SerialPort.Binding.createPort(config.serialPort, { echo: true, record: true });
+    SerialPortTest.Binding.createPort(config.serialPort, { echo: true, record: true });
+    serialPort = new SerialPortTest(config.serialPort, {
+      baudRate: config.serialBaud
+    });
   } else {
     console.log('Using real serial port');
-    SerialPort = require('serialport');
+    serialPort = new SerialPort(config.serialPort, {
+      baudRate: config.serialBaud
+    });
   }
-  serialPort = new SerialPort(config.serialPort, {
-    baudRate: config.serialBaud
-  });
-  serialPort.on('data', data => {
+  serialPort.on('data', (data: Buffer) => {
     console.log('From Arduino: ', data.toString());
   });
   serialPort.on('close', retryArduinoConnect);
-  serialPort.on('open', err => {
+  serialPort.on('open', (err: any) => {
     if (!err) {
       console.log(`Listening to serial comms on port ${config.serialPort} @ ${config.serialBaud}`);
     }
@@ -73,7 +91,7 @@ function connectToApiServer() {
   client.connect(SOCKET_URL, config.socketProtocol);
 }
 
-function messageReceived(message) {
+function messageReceived(message: IMessage) {
   if (message.type === 'utf8') {
     try {
       const data = JSON.parse(message.utf8Data);
@@ -91,21 +109,21 @@ function messageReceived(message) {
   }
 }
 
-function sendCommand(command, data) {
-  const dataToSend = Array.isArray(data) ? data : [ data ];
+function sendCommand(command: number, data: number | Array<number>) {
+  const dataToSend: Array<number> = Array.isArray(data) ? data : [ data ];
   console.log(`Sending command: ${command}`, dataToSend);
   dataToSend.unshift(command);
   serialPort.write(Buffer.from(dataToSend));
 }
 
-client.on('connectFailed', err => {
+client.on('connectFailed', (err: any) => {
   console.error('Connection failed: ', err);
   retryApiConnect();
 });
 
-client.on('connect', conn => {
+client.on('connect', (conn: connection) => {
   console.log('Connected to API server');
-  conn.on('error', err => {
+  conn.on('error', (err: any) => {
     console.error('An error occurred: ', err);
     retryApiConnect();
   });
