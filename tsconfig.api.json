@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "api-server/dist/",
+    "noImplicitAny": true,
+    "target": "es2017",
+    "declaration": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "typeRoots": [ "node_modules/@types" ],
+    "experimentalDecorators": true
+  },
+  "files": [
+    "./api-server/index.ts"
+  ]
+}
