@@ -16,7 +16,7 @@ export class Speak extends React.Component<undefined, ISpeakState> {
 
   handleSubmit(evt: React.FormEvent) {
     evt.preventDefault();
-    post('speak', { text: this.state.text });
+    post('speak', { phrase: this.state.text });
     this.setState({ text: '' });
   }
 
