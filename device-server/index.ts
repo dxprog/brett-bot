@@ -35,11 +35,11 @@ interface ISpeechCommand extends ICommand, IEspeakOptions {
 }
 
 const COMMANDS: any = {
-  EYES(data: IEyeColorCommand) {
+  eyes(data: IEyeColorCommand) {
     const rgbValue = (data.red ? 0x4 : 0) | (data.green ? 0x2 : 0) | (data.blue ? 0x1 : 0);
     sendCommand(Command.Eyes, rgbValue);
   },
-  SPEAK(data: ISpeechCommand) {
+  speak(data: ISpeechCommand) {
     // TODO - shouldn't have to instantiate this every time
     const espeak = new Espeak(data);
     espeak.speak(data.phrase);
@@ -97,7 +97,8 @@ function messageReceived(message: IMessage) {
 
       console.log('Received command', data);
 
-      const { command } = data;
+      let { command } = data;
+      command = command.toLowerCase();
       if (COMMANDS.hasOwnProperty(command)) {
         COMMANDS[command](data);
       }
