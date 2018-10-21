@@ -1,6 +1,5 @@
 import { client as WebSocketClient, connection, IMessage } from 'websocket';
 import * as SerialPort from 'serialport';
-const SerialPortTest = require('serialport/test');
 
 import config from '../config';
 import { Espeak, IEspeakOptions } from './espeak';
@@ -65,6 +64,7 @@ function retryArduinoConnect() {
 function connectToArduino() {
   if (config.serialTest) {
     console.log('Using mock serial port');
+    const SerialPortTest = require('serialport/test');
     SerialPortTest.Binding.createPort(config.serialPort, { echo: true, record: true });
     serialPort = new SerialPortTest(config.serialPort, {
       baudRate: config.serialBaud
