@@ -27,22 +27,18 @@ function sendMessage(message: any) {
   }
 }
 
-function handleStatusRequest(res: express.Response) {
-  res.json({
-    status: !!deviceConnection
-  });
-}
-
 app.post('/:command', (req: express.Request, res: express.Response) => {
-  if (req.params.command === 'status') {
-    handleStatusRequest(res);
-  } else {
-    sendMessage({
-      command: req.params.command,
-      ...req.body
-    });
-    res.send('OK');
-  }
+  sendMessage({
+    command: req.params.command,
+    ...req.body
+  });
+  res.send('OK');
+});
+
+app.get('/status', (req: express.Request, res: express.Response) => {
+  res.json({
+    connected: !!deviceConnection
+  });
 });
 
 httpServer.listen(config.port, () => {
