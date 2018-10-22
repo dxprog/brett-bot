@@ -27,12 +27,22 @@ function sendMessage(message: any) {
   }
 }
 
-app.post('/:command', (req: express.Request, res: express.Response) => {
-  sendMessage({
-    command: req.params.command,
-    ...req.body
+function handleStatusRequest(res: express.Response) {
+  res.json({
+    status: !!deviceConnection
   });
-  res.send('OK');
+}
+
+app.post('/:command', (req: express.Request, res: express.Response) => {
+  if (req.params.command === 'status') {
+    handleStatusRequest(res);
+  } else {
+    sendMessage({
+      command: req.params.command,
+      ...req.body
+    });
+    res.send('OK');
+  }
 });
 
 httpServer.listen(config.port, () => {
