@@ -1,0 +1,26 @@
+.connected-icon {
+  position: absolute;
+  right: 48px;
+  top: 34px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  background: url(/images/power-cord.svg);
+}
+
+.connected-icon:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.connected-icon--connected:before {
+  background: url(/images/checkmark.svg);
+}
+
+.connected-icon--disconnected:before {
+  background: url(/images/cross.svg);
+}
