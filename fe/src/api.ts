@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from './config';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -7,7 +7,7 @@ export enum HttpMethod {
   DELETE = 'DELETE'
 }
 
-export async function call(method: HttpMethod, endpoint: string, data?: any) {
+export async function call(method: HttpMethod, endpoint: string, data?: any): Promise<any> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, `https://${config.url}/${endpoint}`, true);

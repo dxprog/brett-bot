@@ -4,13 +4,14 @@
   "description": "A Brett-like Robot",
   "main": "index.js",
   "scripts": {
-    "start:fe": "node fe/scripts/start.js",
+    "start:fe": "npm run setup:config && node fe/scripts/start.js",
     "start:api": "ts-node --project tsconfig.api.json api-server/index.ts",
     "start:device": "ts-node --project tsconfig.device.json device-server/index.ts",
     "build:api": "tsc --project tsconfig.api.json",
     "build:device": "tsc --project tsconfig.device.json",
-    "build:fe": "node fe/scripts/build.js",
-    "test:fe": "node fe/scripts/test.js --env=jsdom"
+    "build:fe": "npm run setup:config && node fe/scripts/build.js",
+    "test:fe": "npm run setup:config && node fe/scripts/test.js --env=jsdom",
+    "setup:config": "cp -n config.ts fe/src/config.ts 2>/dev/null || :"
   },
   "repository": {
     "type": "git",
