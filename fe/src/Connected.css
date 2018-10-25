@@ -11,16 +11,17 @@
 .connected-icon:before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  left: 24px;
+  top: 8px;
+  bottom: 8px;
+  right: -8px;
+  background-size: contain;
 }
 
 .connected-icon--connected:before {
-  background: url(/images/checkmark.svg);
+  background-image: url(/images/checkmark.svg);
 }
 
 .connected-icon--disconnected:before {
-  background: url(/images/cross.svg);
+  background-image: url(/images/cross.svg);
 }
