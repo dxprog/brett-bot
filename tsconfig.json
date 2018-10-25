@@ -17,7 +17,11 @@
     "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": [ "lib/*" ]
+    }
   },
   "exclude": [
     "node_modules",

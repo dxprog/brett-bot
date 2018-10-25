@@ -1,8 +1,9 @@
 import { client as WebSocketClient, connection, IMessage } from 'websocket';
 import * as SerialPort from 'serialport';
+import { IEspeakOptions } from 'common/espeak';
 
 import config from '../config';
-import { Espeak, IEspeakOptions } from './espeak';
+import { Espeak } from './espeak';
 
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 

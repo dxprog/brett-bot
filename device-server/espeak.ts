@@ -1,15 +1,10 @@
 import { execFile } from 'child_process';
-
-export interface IEspeakOptions {
-  [key: string]: any,
-  lang?: string;
-  gender?: string;
-  variant?: number;
-  speed?: number;
-  ssml?: boolean;
-  pitch?: number;
-  emphasis?: number;
-}
+import {
+  IEspeakOptions,
+  ESPEAK_LANGUAGES,
+  ESPEAK_GENDERS,
+  ESPEAK_VARIANTS
+} from 'common/espeak';
 
 const DEFAULT_OPTIONS: IEspeakOptions = {
   lang: 'en',
@@ -26,18 +21,9 @@ function isNumeric(val: any): boolean {
 }
 
 const OPTIONS_CONSTRAINTS: any = {
-  lang: [
-    // Fully supported
-    'af', 'bs', 'ca', 'cs', 'de', 'en', 'en-us', 'en-sc', 'en-n', 'en-rp', 'en-wm',
-    'el', 'eo', 'es', 'es-la', 'fi', 'fr', 'hr', 'hu', 'it', 'kn', 'lv', 'nl', 'pl',
-    'pt', 'pt-pt', 'ro', 'sk', 'sr', 'sv', 'ta', 'tr', 'zh',
-
-    // Provisional
-    'cy', 'grc', 'hi', 'hy', 'id', 'id', 'jbo', 'ka', 'la', 'mk', 'no', 'ru', 'sq',
-    'vi', 'zh-yue'
-  ],
-  gender: [ 'm', 'f' ],
-  variant: [ 1, 2, 3, 4, 5, 6, 7, 'croak', 'whisper' ],
+  lang: ESPEAK_LANGUAGES,
+  gender: ESPEAK_GENDERS,
+  variant: ESPEAK_VARIANTS,
   speed: 'number',
   ssml: 'boolean',
   pitch: 'number',

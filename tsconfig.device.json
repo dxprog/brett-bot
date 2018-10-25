@@ -7,7 +7,11 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "typeRoots": [ "node_modules/@types" ],
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": [ "common/*" ]
+    }
   },
   "files": [
     "./device-server/index.ts"
