@@ -13,9 +13,13 @@ class App extends React.Component {
           <h1 className="App-title">BrettBot Control Panel</h1>
           <Connected />
         </header>
-        <section>
-          <Speak />
-          <EyeColors />
+        <section class="controls">
+          <div class="controls__section">
+            <Speak />
+          </div>
+          <div class="controls__section">
+            <EyeColors />
+          </div>
         </section>
       </div>
     );
