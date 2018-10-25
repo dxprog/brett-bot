@@ -4,5 +4,6 @@ export default {
   socketProtocol: 'brett-bot-protocol',
   serialTest: false,
   serialBaud: 9600,
-  serialPort: '/dev/ttyACM0'
+  serialPort: '/dev/ttyACM0',
+  dbPath: './db/brettbot.sqlite3'
 };

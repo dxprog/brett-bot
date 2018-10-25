@@ -8,6 +8,7 @@ import {
 } from 'websocket';
 
 import config from '../config';
+import { Logger } from './logger';
 
 const app = express();
 app.use(express.json());
@@ -19,10 +20,12 @@ const socketServer = new WebSocketServer({
 });
 
 let deviceConnection: connection | null;
+let logger = new Logger(config.dbPath);
 
 function sendMessage(message: any) {
   if (deviceConnection) {
     console.log('Sending message to device', message);
+    logger.log(message.command, message);
     deviceConnection.sendUTF(JSON.stringify(message));
   }
 }
