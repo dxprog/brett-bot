@@ -1,11 +1,5 @@
 import * as sqlite3 from 'sqlite3';
-
-export interface ILogCommand {
-  rowid: number;
-  command: string;
-  data: any;
-  date: Date;
-}
+import { ILogCommand } from 'common/logger';
 
 export class Logger {
   private db: sqlite3.Database;
@@ -25,7 +19,7 @@ export class Logger {
   fetch(since: number): Promise<Array<ILogCommand>> {
     return new Promise((resolve, reject) => {
       this.db.serialize(() => {
-        this.db.all('SELECT * FROM commands WHERE date > ?', since, (err, rows: Array<ILogCommand>) => {
+        this.db.all('SELECT * FROM commands WHERE date > ? ORDER BY date', since, (err, rows: Array<ILogCommand>) => {
           if (err) {
             reject(err);
           } else {
