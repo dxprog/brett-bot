@@ -44,6 +44,12 @@ app.get('/status', (req: express.Request, res: express.Response) => {
   });
 });
 
+app.get('/log', async (req: express.Request, res: express.Response) => {
+  const since = req.query.since || Date.now() - (360000 * 12);
+  const logs = await logger.fetch(since);
+  res.json(logs);
+});
+
 httpServer.listen(config.port, () => {
   console.log(`Server listening on ${config.port}`);
 });
