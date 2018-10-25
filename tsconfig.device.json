@@ -8,9 +8,9 @@
     "module": "commonjs",
     "typeRoots": [ "node_modules/@types" ],
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "baseUrl": "fe/src/",
     "paths": {
-      "@common/*": [ "common/*" ]
+      "common/*": [ "common/*" ]
     }
   },
   "files": [
