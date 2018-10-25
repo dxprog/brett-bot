@@ -2,19 +2,10 @@ import { execFile } from 'child_process';
 import {
   IEspeakOptions,
   ESPEAK_LANGUAGES,
-  ESPEAK_GENDERS,
-  ESPEAK_VARIANTS
+  ESPEAK_VARIANTS,
+  ESPEAK_DEFAULT_OPTIONS,
+  ESPEAK_VOICE_TYPE_CODES
 } from 'common/espeak';
-
-const DEFAULT_OPTIONS: IEspeakOptions = {
-  lang: 'en',
-  gender: 'm',
-  variant: 3,
-  speed: 120,
-  ssml: false,
-  pitch: 50,
-  emphasis: 5
-};
 
 function isNumeric(val: any): boolean {
   return val - 0 == val;
@@ -22,7 +13,7 @@ function isNumeric(val: any): boolean {
 
 const OPTIONS_CONSTRAINTS: any = {
   lang: ESPEAK_LANGUAGES,
-  gender: ESPEAK_GENDERS,
+  voiceType: ESPEAK_VOICE_TYPE_CODES,
   variant: ESPEAK_VARIANTS,
   speed: 'number',
   ssml: 'boolean',
@@ -34,8 +25,8 @@ const OPTIONS_CONSTRAINTS: any = {
 export class Espeak {
   private options: IEspeakOptions;
 
-  constructor(options: IEspeakOptions = DEFAULT_OPTIONS) {
-    this.options = { ...DEFAULT_OPTIONS, ...options };
+  constructor(options: IEspeakOptions = ESPEAK_DEFAULT_OPTIONS) {
+    this.options = { ...ESPEAK_DEFAULT_OPTIONS, ...options };
   }
 
   public speak(text: string): void {
@@ -43,7 +34,7 @@ export class Espeak {
     if (!optionsValid.length) {
       const { options } = this;
       const args: Array<string> = [];
-      const langModifiers = `${options.gender || ''}${options.variant || ''}`;
+      const langModifiers = `${options.voiceType || ''}${options.variant || ''}`;
       args.push(`-v${options.lang}${langModifiers && '+'}${langModifiers}`);
       args.push(`-k${options.emphasis}`);
       args.push(`-s${options.speed}`);

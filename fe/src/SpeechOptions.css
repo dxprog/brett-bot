@@ -1,0 +1,17 @@
+.speech-option {
+  text-align: left;
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.speech-option__label {
+  display: inline-block;
+  flex: 0 0 40%;
+  padding: 12px 12px 12px 0;
+  text-align: right;
+}
+
+.speech-option__option {
+  display: block;
+  padding: 12px 12px 12px 0;
+}
