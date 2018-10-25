@@ -45,7 +45,7 @@ app.get('/status', (req: express.Request, res: express.Response) => {
 });
 
 app.get('/log', async (req: express.Request, res: express.Response) => {
-  const since = req.query.since || Date.now() - (360000 * 12);
+  const since = req.query.since || Date.now() - (3600 * 12 * 1000);
   const logs = await logger.fetch(since);
   res.json(logs);
 });

@@ -3,6 +3,7 @@ import './App.css';
 
 import { Connected } from './Connected';
 import { EyeColors } from './EyeColors';
+import { Log } from './Log';
 import { Speak } from './Speak';
 
 class App extends React.Component {
@@ -19,6 +20,9 @@ class App extends React.Component {
           </div>
           <div className="controls__section">
             <EyeColors />
+          </div>
+          <div className="controls__section">
+            <Log />
           </div>
         </section>
       </div>

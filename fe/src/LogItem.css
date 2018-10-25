@@ -1,0 +1,22 @@
+.log__item {
+  display: flex;
+  padding: 12px 0;
+}
+
+.log__item-avatar {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+
+.log__item-timestamp {
+  font-size: 12px;
+  color: #444;
+  margin: 8px 0 4px;
+}
+
+.log__item-body {
+  margin: 0;
+}
