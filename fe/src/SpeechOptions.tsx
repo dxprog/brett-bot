@@ -102,7 +102,7 @@ export class SpeechOptions extends React.Component<ISpeechOptionsProps> {
           </div>
         </div>
         <div className="speech-option">
-          <span className="speech-option__label">Enable SSML: </span>
+          <span className="speech-option__label">Voice Speed: </span>
           <div className="speech-option__options">
             <label className="speech-option__option">
               <input
