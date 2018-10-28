@@ -18,9 +18,12 @@ export interface ILogState {
 }
 
 export class Log extends React.Component<undefined, ILogState> {
+  private scrollingContainer: React.RefObject<HTMLUListElement>;
+
   constructor(props: any) {
     super(props);
 
+    this.scrollingContainer = React.createRef<HTMLUListElement>()
     this.state = { logs: [] };
     this.getLogs();
   }
@@ -36,6 +39,9 @@ export class Log extends React.Component<undefined, ILogState> {
       console.error(err);
     }
     this.setState({ logs: [ ...this.state.logs, ...newLogs ] });
+    if (this.scrollingContainer.current) {
+      this.scrollingContainer.current.scrollTop = this.scrollingContainer.current.scrollHeight;
+    }
     setTimeout(() => this.getLogs(), POLL_DELAY);
   }
 
@@ -44,7 +50,7 @@ export class Log extends React.Component<undefined, ILogState> {
     return (
       <Fragment>
         <h2>Log</h2>
-        <ul className="logs">
+        <ul className="logs" ref={this.scrollingContainer}>
           {
             this.state.logs.map((log: ILogCommand) => {
               if (log.command === 'speak') {
