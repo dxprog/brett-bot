@@ -22,7 +22,15 @@ export class Speak extends React.Component<undefined, ISpeakState> {
 
   handleSubmit(evt: React.FormEvent) {
     evt.preventDefault();
-    post('speak', { ...this.state.options, phrase: this.state.text });
+    const { options } = this.state;
+    const data = { ...options, phrase: this.state.text };
+
+    // If the voice type is whisper or croak, send the variant as an empty string
+    // or else it'll be ignored
+    if (options && (options.voiceType === 'croak' || options.voiceType === 'whisper')) {
+      data.variant = '';
+    }
+    post('speak', data);
     this.setState({ text: '' });
   }
 
