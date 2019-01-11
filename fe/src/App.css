@@ -18,10 +18,17 @@
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
   max-width: 1280px;
   margin: 0 auto;
 }
 
 .controls__section {
   width: 33%;
+}
+
+@media (max-width: 1024px) {
+  .controls__section {
+    width: 100%;
+  }
 }
