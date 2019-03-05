@@ -14,9 +14,8 @@ import {
 
 import config from '../config';
 import { Logger } from './logger';
+import { Soundbite } from './soundbite';
 
-const SOUND_BITE_LOCATION = path.resolve('./soundbites');
-const SOUND_BITE_MAX_DURATION = 20;
 const MAX_UPLOAD_SIZE = 2 * 1024 * 1024; // 2MB
 
 const app = express();
@@ -34,7 +33,8 @@ const socketServer = new WebSocketServer({
 });
 
 let deviceConnection: connection | null;
-let logger = new Logger(config.dbPath);
+const logger = new Logger(config.dbPath);
+const soundbite = new Soundbite(config.dbPath, config.soundbitePath);
 
 function sendMessage(message: any) {
   if (deviceConnection) {
@@ -65,16 +65,10 @@ app.get('/log', async (req: express.Request, res: express.Response) => {
 });
 
 app.post('/soundbite', async (req: express.Request, res: express.Response) => {
-  const uploadedFile: UploadedFile = <UploadedFile>req.files.soundUpload;
-  if (uploadedFile) {
-    const id3Tags = await mm.parseBuffer(uploadedFile.data);
-    if (id3Tags && id3Tags.format.duration < SOUND_BITE_MAX_DURATION) {
-
-    } else {
-      res.sendStatus(415);
-    }
+  if (soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data)) {
+    res.json(true);
   } else {
-    res.sendStatus(412);
+    res.sendStatus(400);
   }
 });
 

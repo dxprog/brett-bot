@@ -5,5 +5,6 @@ export default {
   serialTest: false,
   serialBaud: 9600,
   serialPort: '/dev/ttyACM0',
-  dbPath: './db/brettbot.sqlite3'
+  dbPath: './db/brettbot.sqlite3',
+  soundbitePath: './soundbites'
 };
