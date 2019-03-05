@@ -64,6 +64,11 @@ app.get('/log', async (req: express.Request, res: express.Response) => {
   res.json(logs);
 });
 
+app.get('/soundbites', async(req: express.Request, res: express.Response) => {
+  const soundbites = await soundbite.getSoundbites();
+  res.json(soundbites);
+});
+
 app.post('/soundbite', async (req: express.Request, res: express.Response) => {
   if (soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data)) {
     res.json(true);

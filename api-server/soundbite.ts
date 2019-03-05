@@ -4,6 +4,8 @@ import * as mm from 'music-metadata';
 import * as path from 'path';
 import * as sqlite3 from 'sqlite3';
 
+import { ISoundbite } from 'common/soundbite';
+
 const SOUND_BITE_MAX_DURATION = 20;
 
 export class Soundbite {
@@ -35,11 +37,14 @@ export class Soundbite {
     }
   }
 
-  async getSoundbites() {
-    return new Promise(resolve => {
-      this.db.serialize(() => {
-        const stmt = this.db.prepare('SELECT * FROM soundbites');
-
+  async getSoundbites(): Promise<Array<ISoundbite>> {
+    return new Promise((resolve, reject) => {
+      this.db.all('SELECT * FROM soundbites', (err, rows: Array<ISoundbite>) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(rows);
       });
     });
   }
