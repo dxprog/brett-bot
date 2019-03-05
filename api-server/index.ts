@@ -70,7 +70,8 @@ app.get('/soundbites', async(req: express.Request, res: express.Response) => {
 });
 
 app.post('/soundbite', async (req: express.Request, res: express.Response) => {
-  if (soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data)) {
+  const result = await soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data);
+  if (result) {
     res.json(true);
   } else {
     res.sendStatus(400);
