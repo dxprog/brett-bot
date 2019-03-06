@@ -48,4 +48,17 @@ export class Soundbite {
       });
     });
   }
+
+  async getSoundbite(fileName: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const filePath = path.resolve(this.soundbitePath, fileName);
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
 }

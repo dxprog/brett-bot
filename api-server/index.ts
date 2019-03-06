@@ -69,6 +69,16 @@ app.get('/soundbites', async(req: express.Request, res: express.Response) => {
   res.json(soundbites);
 });
 
+app.get('/soundbite/:fileName', async (req: express.Request, res: express.Response) => {
+  const fileData = await soundbite.getSoundbite(req.params.fileName);
+  if (fileData) {
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.send(fileData);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 app.post('/soundbite', async (req: express.Request, res: express.Response) => {
   const result = await soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data);
   if (result) {
