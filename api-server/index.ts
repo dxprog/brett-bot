@@ -44,14 +44,6 @@ function sendMessage(message: any) {
   }
 }
 
-app.post('/:command', (req: express.Request, res: express.Response) => {
-  sendMessage({
-    command: req.params.command,
-    ...req.body
-  });
-  res.send('OK');
-});
-
 app.get('/status', (req: express.Request, res: express.Response) => {
   res.json({
     connected: !!deviceConnection
@@ -86,6 +78,14 @@ app.post('/soundbite', async (req: express.Request, res: express.Response) => {
   } else {
     res.sendStatus(400);
   }
+});
+
+app.post('/:command', (req: express.Request, res: express.Response) => {
+  sendMessage({
+    command: req.params.command,
+    ...req.body
+  });
+  res.send('OK');
 });
 
 httpServer.listen(config.port, () => {

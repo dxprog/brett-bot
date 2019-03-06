@@ -12,6 +12,7 @@ config.js
 
 # production
 build/
+soundbites/
 
 # misc
 .DS_Store
