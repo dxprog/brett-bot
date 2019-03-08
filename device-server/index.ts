@@ -1,9 +1,11 @@
 import { client as WebSocketClient, connection, IMessage } from 'websocket';
 import * as SerialPort from 'serialport';
 import { IEspeakOptions } from 'common/espeak';
+import { execSync } from 'child_process';
 
 import config from '../config';
 import { Espeak } from './espeak';
+import { ISoundbite } from 'fe/src/common/soundbite';
 
 const SOCKET_URL = `ws://${config.url}:${config.port}`;
 
@@ -34,6 +36,10 @@ interface ISpeechCommand extends ICommand, IEspeakOptions {
   phrase: string;
 }
 
+interface ISoundbiteApi extends ISoundbite {
+  fileUrl: string;
+}
+
 const COMMANDS: any = {
   eyes(data: IEyeColorCommand) {
     const rgbValue = (data.red ? 0x4 : 0) | (data.green ? 0x2 : 0) | (data.blue ? 0x1 : 0);
@@ -43,6 +49,9 @@ const COMMANDS: any = {
     // TODO - shouldn't have to instantiate this every time
     const espeak = new Espeak(data);
     espeak.speak(data.phrase);
+  },
+  playsound(data: ISoundbiteApi) {
+    execSync(`omxplayer ${data.fileUrl}`)
   }
 };
 
