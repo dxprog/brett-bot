@@ -1,10 +1,11 @@
+import { ISoundbite } from 'common/soundbite';
 import * as fs from 'fs';
 import * as md5 from 'md5';
 import * as mm from 'music-metadata';
 import * as path from 'path';
 import * as sqlite3 from 'sqlite3';
 
-import { ISoundbite } from 'common/soundbite';
+import config from '../config';
 
 const SOUND_BITE_MAX_DURATION = 20;
 
@@ -20,6 +21,10 @@ async function writeFileAsync(fileName: string, fileData: Buffer) {
   });
 }
 
+function createShortcode(name: string): string {
+  return name.replace(/[\s]+/ig, '-').replace(/[^\w-]+/ig, '').toLowerCase();
+}
+
 export class Soundbite {
   private db: sqlite3.Database;
   private soundbitePath: string;
@@ -29,9 +34,8 @@ export class Soundbite {
     this.soundbitePath = soundbitePath;
   }
 
-  async createSoundbite(name: string, fileData: Buffer) {
+  async createSoundbite(name: string, shortcode: string, fileData: Buffer) {
     const id3Data = await mm.parseBuffer(fileData, 'audio/mpeg');
-    console.log(id3Data);
     if (id3Data && id3Data.format.duration && id3Data.format.duration < SOUND_BITE_MAX_DURATION) {
       const fileName = path.resolve(this.soundbitePath, `${md5(name)}.mp3`);
       try {
@@ -41,9 +45,10 @@ export class Soundbite {
         return false;
       }
 
+      shortcode = createShortcode(shortcode === null ? name : shortcode);
       this.db.serialize(() => {
-        const stmt = this.db.prepare('INSERT INTO soundbites VALUES (?)');
-        stmt.run(name);
+        const stmt = this.db.prepare('INSERT INTO soundbites VALUES (?, ?)');
+        stmt.run(name, shortcode);
         stmt.finalize();
       });
 
@@ -61,7 +66,14 @@ export class Soundbite {
           reject(err);
           return;
         }
-        resolve(rows);
+        resolve(rows.map(row => {
+          const fileName: string = `${md5(row.title)}.mp3`;
+          return {
+            ...row,
+            fileName,
+            fileUrl: `https://${config.url}/soundbite/${fileName}`
+          };
+        }));
       });
     });
   }

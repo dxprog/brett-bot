@@ -1,11 +1,8 @@
 import * as cors from 'cors';
 import * as express from 'express';
 import * as fileUpload from 'express-fileupload';
-import * as fs from 'fs';
 import { UploadedFile } from 'express-fileupload';
 import * as http from 'http';
-import * as mm from 'music-metadata';
-import * as path from 'path';
 import {
   server as WebSocketServer,
   request,
@@ -72,7 +69,7 @@ app.get('/soundbite/:fileName', async (req: express.Request, res: express.Respon
 });
 
 app.post('/soundbite', async (req: express.Request, res: express.Response) => {
-  const result = await soundbite.createSoundbite(req.body.name, (<UploadedFile>req.files.soundFile).data);
+  const result = await soundbite.createSoundbite(req.body.name, req.body.shortcode || null, (<UploadedFile>req.files.soundFile).data);
   if (result) {
     res.json(true);
   } else {

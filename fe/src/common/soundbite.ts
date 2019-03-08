@@ -1,4 +1,5 @@
 export interface ISoundbite {
-  name: string;
+  title: string;
+  shortcode: string;
   fileName: string;
 }
